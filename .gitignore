@@ -1,5 +1,5 @@
 # Others not in the list below
-api/*.*
+api/parsefile.py
 module_cache.py
 
 # Byte-compiled / optimized / DLL files

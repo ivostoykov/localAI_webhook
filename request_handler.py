@@ -96,7 +96,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         if self.path == '/':
             result = self.traverse_api_directory()
             self.send_response(200)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             self.end_headers()
             self.wfile.write(str(result).encode())
             return
@@ -109,7 +109,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         try:
             result = self.run_python_script(file_path, function_name)
             self.send_response(200)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             self.end_headers()
             self.wfile.write(str(result).encode())
         except json.JSONDecodeError:
