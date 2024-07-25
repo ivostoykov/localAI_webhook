@@ -1,3 +1,7 @@
+# Others not in the list below
+api/*.*
+module_cache.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -35,6 +39,9 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
+# All logs
+*.log
 
 # Unit test / coverage reports
 htmlcov/
