@@ -80,3 +80,9 @@ When sending data via `POST`, you can provide it in either a `key=value` format 
 ### Reading Web Resource
 
 A simple example of how to fetch web content which can be passed next to the model as a context is available [here](api/readweb.py)
+
+#### Usage
+
+```
+curl -X POST http://localhost:10001/api/readweb -H "Content-Type: application/json" -d '{"resource":"https://github.com/ivostoykov/localAI"}'
+```
