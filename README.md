@@ -76,3 +76,7 @@ http://localhost:10001/api/test/helloWorld
 Both scenarios are handled as both `GET` and `POST` requests, with the result returned as plain text.
 
 When sending data via `POST`, you can provide it in either a `key=value` format (as FormData) or JSON format. Files must be sent using form-multipart encoding.
+
+### Reading Web Resource
+
+A simple example of how to fetch web content which can be passed next to the model as a context is available [here](api/readweb.py)
