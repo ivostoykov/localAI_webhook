@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This project will soon be replaced by new tools and will be deprecated.
+>
 # Local AI Web Hook
 
 This project extends [Local AI](https://github.com/ivostoykov/localAI) with pre-query functionality.
