@@ -12,6 +12,14 @@ class RequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def _set_headers(self, content_type="application/json"):
+        self.send_response(200)
+        self.send_header('Content-type', content_type)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', '*')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
     def traverse_api_directory(self):
         result = []
         for root, _, files in os.walk('api'):
@@ -92,6 +100,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
                     pass
 
     def do_GET(self):
+        self._set_headers()
         self.delete_lai_files()
         if self.path == '/':
             result = self.traverse_api_directory()
@@ -170,7 +179,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
     def handle_non_multipart_form_data(self, file_path, function_name):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
-        logger.debug(f"content_length : {content_length }; post_data type: {type(post_data)}; post_data : {post_data}")
+        logger.debug(f"content_length : {content_length }; post_data type: {type(post_data)}; post_data : {str(post_data)}")
 
         if not post_data:
             self.send_error(400, "Empty request body")
@@ -179,10 +188,10 @@ class RequestHandler(SimpleHTTPRequestHandler):
         self.process_request(file_path, function_name, post_data, [])
 
     def process_request(self, file_path, function_name, post_data, files):
-        logger.debug(f"file_path: {file_path}; function_name: {function_name}; post_data: {json.dumps(post_data)}; files: {json.dumps(files)}")
+        logger.debug(f"file_path: {file_path}; function_name: {function_name}; post_data: {str(post_data)}; files: {str(files)}")
         try:
             result = self.run_python_script(file_path, function_name, post_data, files)
-            logger.debug(f"result type: {type(result)}; result: {result}")
+            logger.debug(f"result type: {type(result)}; result: {str(result)}")
 
             if not result.strip():  # Check if result is empty or only contains whitespace
                 result = {"econtent": "empty"}
@@ -194,18 +203,16 @@ class RequestHandler(SimpleHTTPRequestHandler):
             else:
                 raise TypeError(f"Expected either a string or JSON. Got {type(result)}")
 
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
+            self._set_headers()
             self.wfile.write(result)
 
         except json.JSONDecodeError as je:
             logger.error(je)
-            logger.error(f"result: {result}")
+            logger.error(f"result: {str(result)}")
             self.send_error(500, "Invalid JSON output from script")
         except Exception as e:
             logger.error(e)
-            logger.error(result)
+            logger.error(str(result))
         finally:
             self.cleanup_temp_files(files)
 
